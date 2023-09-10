@@ -29,6 +29,9 @@ class _MyHomePageState extends State<MyHomePage> {
   final String assetPath = "../assets/";  // Path to images
   int curImageIdx = 0;                    // Index of current image displayed
   late String curImagePath;               // Path to current image
+
+  // User feedback
+  bool recusingImages = false;
   
 
   _MyHomePageState() {
@@ -53,7 +56,12 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void recurseImages(int cur, int fin) {
-    if (cur == fin) return;
+    if (cur == fin) {
+      recusingImages = false;
+      return; 
+    }
+
+    if (!recusingImages) recusingImages = true;
     Future.delayed(const Duration(seconds: 1), () {
       nextImage();
       recurseImages(cur + 1, fin);
@@ -64,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Button Image Toggle'),
+        title: const Text('Visual Memory Test'),
       ),
       body: Center(
         child: Column(
@@ -83,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Container(
                 padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.blue,
+                  color: recusingImages ? Colors.red : Colors.blue,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Text(
