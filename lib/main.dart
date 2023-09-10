@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 void main() {
@@ -24,6 +26,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List<int> imagesUsed = [];
   bool isImageVisible = false; // Track the visibility of the image
+
+  void getAssets() {
+    // TODO: get working.
+    final directory = Directory('../assets/');
+    final List<FileSystemEntity> assets = directory.listSync(recursive: false, followLinks: false);
+    assets.forEach(print);
+  }
 
   void nextImage() {
     setState(() {
