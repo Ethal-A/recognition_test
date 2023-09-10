@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 
@@ -20,19 +20,31 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  // Number of images
+  final int numberOfImages = 9;
+  late List<int> images;
+
+  // Displaying images
+  final String assetPath = "../assets/";
+  int curImageIdx = 0;
+  late String curImagePath;
+  
+
+  _MyHomePageState() {
+    images = List<int>.generate(numberOfImages, (index) => index + 1);
+    images.shuffle(Random(0));  // Randomising images
+    
+    // Set the current image
+    curImagePath = "$assetPath${images[curImageIdx]}.png";
+    print(curImagePath);
+  }
+
   int imageNumber = 0;
-  String assetPath = '../assets/';
+  
   String imagePath = '';
 
   List<int> imagesUsed = [];
   bool isImageVisible = false; // Track the visibility of the image
-
-  void getAssets() {
-    // TODO: get working.
-    final directory = Directory('../assets/');
-    final List<FileSystemEntity> assets = directory.listSync(recursive: false, followLinks: false);
-    assets.forEach(print);
-  }
 
   void nextImage() {
     setState(() {
