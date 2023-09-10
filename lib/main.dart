@@ -25,35 +25,27 @@ class _MyHomePageState extends State<MyHomePage> {
   late List<int> images;
 
   // Displaying images
-  final String assetPath = "../assets/";
-  int curImageIdx = 0;
-  late String curImagePath;
+  bool isImageVisible = false;            // Track the visibility of the image
+  final String assetPath = "../assets/";  // Path to images
+  int curImageIdx = 0;                    // Index of current image displayed
+  late String curImagePath;               // Path to current image
   
 
   _MyHomePageState() {
-    images = List<int>.generate(numberOfImages, (index) => index + 1);
-    images.shuffle(Random(0));  // Randomising images
+    images = List<int>.generate(numberOfImages, (index) => index);
+    images.shuffle(Random());  // Randomising images
     
     // Set the current image
     curImagePath = "$assetPath${images[curImageIdx]}.png";
-    print(curImagePath);
   }
-
-  int imageNumber = 0;
-  
-  String imagePath = '';
-
-  List<int> imagesUsed = [];
-  bool isImageVisible = false; // Track the visibility of the image
 
   void nextImage() {
     setState(() {
-      imageNumber += 1;
-      imagesUsed.add(imageNumber);
-      imagePath = "$assetPath$imageNumber.png";
+      curImageIdx++;
+      curImagePath = "$assetPath${images[curImageIdx]}.png";
     });
   }
-
+  
   void toggleImageVisibility() {
     setState(() {
       isImageVisible = !isImageVisible;
@@ -72,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Button Image Toggle'),
+        title: const Text('Button Image Toggle'),
       ),
       body: Center(
         child: Column(
@@ -80,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             Visibility(
               visible: isImageVisible,
-              child: Image.asset(imagePath),
+              child: Image.asset(curImagePath),
             ),
             const SizedBox(height: 20),
             InkWell(
