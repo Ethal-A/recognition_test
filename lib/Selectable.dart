@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Selectable extends StatefulWidget {
-  const Selectable({super.key});
+  final String asset;
+  const Selectable(this.asset, {super.key});
 
   @override
   State<StatefulWidget> createState() => _SelectableState();
@@ -31,7 +32,7 @@ class _SelectableState extends State<Selectable> {
         ),
         child: GestureDetector(
           onTap: () => print('hello!'),
-          child: Image.asset('../assets/0.png'),
+          child: Image.asset(widget.asset),
         )
       ),
     );

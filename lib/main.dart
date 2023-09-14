@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:visual_memory_test/Selectable.dart';
+import 'package:visual_memory_test/selectable.dart';
 
 void main() {
   runApp(MyApp());
@@ -77,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: const Text('Recognition Test'),
       ),
       body: Center(
-        child: Selectable(),
+        child: Selectable(curImagePath),
       ),
 
       // body: Center(
