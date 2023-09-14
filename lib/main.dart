@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:visual_memory_test/Selectable.dart';
 
 void main() {
   runApp(MyApp());
@@ -9,9 +10,7 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: MyHomePage()
-    );
+    return MaterialApp(home: MyHomePage());
   }
 }
 
@@ -25,19 +24,18 @@ class _MyHomePageState extends State<MyHomePage> {
   late List<int> images;
 
   // Displaying images
-  bool isImageVisible = false;            // Track the visibility of the image
-  final String assetPath = "../assets/";  // Path to images
-  int curImageIdx = 0;                    // Index of current image displayed
-  late String curImagePath;               // Path to current image
+  bool isImageVisible = false; // Track the visibility of the image
+  final String assetPath = "../assets/"; // Path to images
+  int curImageIdx = 0; // Index of current image displayed
+  late String curImagePath; // Path to current image
 
   // User feedback
   bool recusingImages = false;
-  
 
   _MyHomePageState() {
     images = List<int>.generate(numberOfImages, (index) => index);
-    images.shuffle(Random());  // Randomising images
-    
+    images.shuffle(Random()); // Randomising images
+
     // Set the current image
     curImagePath = "$assetPath${images[curImageIdx]}.png";
   }
@@ -48,7 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
       curImagePath = "$assetPath${images[curImageIdx]}.png";
     });
   }
-  
+
   void toggleImageVisibility() {
     setState(() {
       isImageVisible = !isImageVisible;
@@ -57,8 +55,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void recurseImages(int cur, int fin) {
     if (cur == fin) {
-      recusingImages = false;
-      return; 
+      setState(() {
+        recusingImages = false;
+      });
+      return;
     }
 
     if (!recusingImages) recusingImages = true;
@@ -68,44 +68,50 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  int hoveredImageIndex = 1;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Visual Memory Test'),
+        title: const Text('Recognition Test'),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Visibility(
-              visible: isImageVisible,
-              child: Image.asset(curImagePath),
-            ),
-            const SizedBox(height: 20),
-            InkWell(
-              onTap: () {
-                if (!isImageVisible) toggleImageVisibility();
-                recurseImages(0, 4);
-                },
-              child: Container(
-                padding: EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: recusingImages ? Colors.red : Colors.blue,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Text(
-                  'Toggle Image',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                  ),
-                ),
-              ),
-            )
-          ],
-        )
-      )
+        child: Selectable(),
+      ),
+
+      // body: Center(
+      //   child: Column(
+      //     mainAxisAlignment: MainAxisAlignment.center,
+      //     children: <Widget>[
+      //       Visibility(
+      //         visible: isImageVisible,
+      //         child: Image.asset(curImagePath),
+      //       ),
+      //       const SizedBox(height: 20),
+      //       InkWell(
+      //         onTap: () {
+      //           if (!isImageVisible) toggleImageVisibility();
+      //           recurseImages(0, 4);
+      //           },
+      //         child: Container(
+      //           padding: EdgeInsets.all(16),
+      //           decoration: BoxDecoration(
+      //             color: recusingImages ? Colors.red : Colors.blue,
+      //             borderRadius: BorderRadius.circular(8),
+      //           ),
+      //           child: const Text(
+      //             'Toggle Image',
+      //             style: TextStyle(
+      //               color: Colors.white,
+      //               fontSize: 18,
+      //             ),
+      //           ),
+      //         ),
+      //       )
+      //     ],
+      //   )
+      // )
     );
   }
 }
