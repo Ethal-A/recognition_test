@@ -77,7 +77,10 @@ class _MyHomePageState extends State<MyHomePage> {
         title: const Text('Recognition Test'),
       ),
       body: Center(
-        child: Selectable(curImagePath),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[Selectable(curImagePath), Selectable("$assetPath${images[curImageIdx + 1]}.png")],
+        )
       ),
 
       // body: Center(

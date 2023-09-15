@@ -31,7 +31,7 @@ class _SelectableState extends State<Selectable> {
                 : Colors.transparent,
         ),
         child: GestureDetector(
-          onTap: () => print('hello!'),
+          onTap: () => print("You clicked ${widget.asset}!"),
           child: Image.asset(widget.asset),
         )
       ),
