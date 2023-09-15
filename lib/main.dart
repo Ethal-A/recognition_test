@@ -14,6 +14,18 @@ class MyApp extends StatelessWidget {
   }
 }
 
+class Selected {
+  List<String> selected = [];
+
+  void add(String str) {
+    selected.add(str);
+  }
+
+  List<String> get() {
+    return selected;
+  }
+}
+
 class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -29,6 +41,8 @@ class _MyHomePageState extends State<MyHomePage> {
   int curImageIdx = 0; // Index of current image displayed
   late String curImagePath; // Path to current image
 
+  late Selected selected;
+
   // User feedback
   bool recusingImages = false;
 
@@ -38,6 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     // Set the current image
     curImagePath = "$assetPath${images[curImageIdx]}.png";
+    selected = Selected();
   }
 
   void nextImage() {
@@ -79,7 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[Selectable(curImagePath), Selectable("$assetPath${images[curImageIdx + 1]}.png")],
+          children: <Widget>[Selectable(curImagePath, this.selected), Selectable("$assetPath${images[curImageIdx + 1]}.png", this.selected)],
         )
       ),
 

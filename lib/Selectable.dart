@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:visual_memory_test/main.dart';
 
 class Selectable extends StatefulWidget {
   final String asset;
-  const Selectable(this.asset, {super.key});
+  final Selected selected;
+  const Selectable(this.asset, this.selected, {super.key});
 
   @override
   State<StatefulWidget> createState() => _SelectableState();
 }
 
 class _SelectableState extends State<Selectable> {
-  bool isHover = false;
+  bool _isHover = false;
 
   void setHover(bool state) {
     setState(() {
-      isHover = state;
+      _isHover = state;
     });
   }
 
@@ -26,12 +28,15 @@ class _SelectableState extends State<Selectable> {
 
       child: Container(
         decoration: BoxDecoration(
-          color: isHover
+          color: _isHover
                 ? Colors.grey.withOpacity(0.3) // Change color on hover.
                 : Colors.transparent,
         ),
         child: GestureDetector(
-          onTap: () => print("You clicked ${widget.asset}!"),
+          onTap: () {
+            widget.selected.add(widget.asset);
+            print(widget.selected.get());
+            },
           child: Image.asset(widget.asset),
         )
       ),
