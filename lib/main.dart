@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:visual_memory_test/flash.dart';
 import 'package:visual_memory_test/selectable.dart';
 
 void main() {
@@ -34,6 +35,7 @@ class _MyHomePageState extends State<MyHomePage> {
   // Number of images
   final int numberOfImages = 9;
   late List<int> images;
+  late List<String> assets;
 
   // Displaying images
   bool isImageVisible = false; // Track the visibility of the image
@@ -53,6 +55,11 @@ class _MyHomePageState extends State<MyHomePage> {
     // Set the current image
     curImagePath = "$assetPath${images[curImageIdx]}.png";
     selected = Selected();
+
+    assets = [];
+    for (var element in images) {
+      assets.add("$assetPath$element.png");
+    }
   }
 
   void nextImage() {
@@ -91,12 +98,14 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: const Text('Recognition Test'),
       ),
-      body: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[Selectable(curImagePath, this.selected), Selectable("$assetPath${images[curImageIdx + 1]}.png", this.selected)],
-        )
-      ),
+      body: Center(child: Flash(assets, const Duration(seconds: 1)))
+
+      // body: Center(
+      //   child: Row(
+      //     mainAxisAlignment: MainAxisAlignment.center,
+      //     children: <Widget>[Selectable(curImagePath, this.selected), Selectable("$assetPath${images[curImageIdx + 1]}.png", this.selected)],
+      //   )
+      // ),
 
       // body: Center(
       //   child: Column(
