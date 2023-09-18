@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-// TODO: Update app state upon selection.
+import 'package:provider/provider.dart';
+import 'package:visual_memory_test/selected_provider.dart';
 
 class Selectable extends StatefulWidget {
   final String asset;
@@ -23,20 +24,20 @@ class _SelectableState extends State<Selectable> {
     return MouseRegion(
       onEnter: (_) => setHover(true),
       onExit: (_) => setHover(false),
-      // onHover: (_) => setHover(true),
 
       child: Container(
         decoration: BoxDecoration(
           color: _isHover
-                ? Colors.grey.withOpacity(0.3) // Change color on hover.
-                : Colors.transparent,
+              ? Colors.grey.withOpacity(0.3) // Change color on hover.
+              : Colors.transparent,
         ),
         child: GestureDetector(
           onTap: () {
-            print(widget.asset);
-            },
+            Provider.of<SelectedProvider>(context, listen: false)
+                .add(widget.asset);
+          },
           child: Image.asset(widget.asset),
-        )
+        ),
       ),
     );
   }

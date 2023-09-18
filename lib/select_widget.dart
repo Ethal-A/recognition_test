@@ -12,7 +12,6 @@ class SelectWidget extends StatefulWidget {
 
 class _SelectWidgetState extends State<SelectWidget> {
   // TODO: Determine if something has been selected
-  // TODO: Store which has been selected
   int _curIndex = 0;  // TODO: Incredment upon selection
 
   @override
@@ -26,8 +25,3 @@ class _SelectWidgetState extends State<SelectWidget> {
     );
   }
 }
-
-      //   child: Row(
-      //     mainAxisAlignment: MainAxisAlignment.center,
-      //     children: <Widget>[Selectable(curImagePath, this.selected), Selectable("$assetPath${images[curImageIdx + 1]}.png", this.selected)],
-      //   )

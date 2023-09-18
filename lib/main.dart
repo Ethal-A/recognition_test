@@ -3,11 +3,17 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:visual_memory_test/flash.dart';
+import 'package:provider/provider.dart';
 import 'package:visual_memory_test/select_widget.dart';
+import 'package:visual_memory_test/selected_provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => SelectedProvider(),  // Provider for global state
+      child: const MyApp()
+    )
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -51,7 +57,19 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: const Text('Recognition Test'),
       ),
-      body: SelectWidget(assets.sublist(0, 4), assets.sublist(5))
+      body: Column(
+        children: <Widget>[
+          Consumer<SelectedProvider>(
+            builder: (context, selectedProvider, _) {
+              return Text(
+                selectedProvider.get.toString()
+              );
+            },
+          ),
+          SelectWidget(assets.sublist(0, 4), assets.sublist(5))
+        ],
+      )
+      
       // body: Center(child: Flash(assets, const Duration(seconds: 1)))
     );
   }
