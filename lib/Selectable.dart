@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:visual_memory_test/main.dart';
+// TODO: Update app state upon selection.
 
 class Selectable extends StatefulWidget {
   final String asset;
-  final Selected selected;
-  const Selectable(this.asset, this.selected, {super.key});
+  const Selectable(this.asset, {super.key});
 
   @override
   State<StatefulWidget> createState() => _SelectableState();
@@ -34,8 +33,7 @@ class _SelectableState extends State<Selectable> {
         ),
         child: GestureDetector(
           onTap: () {
-            widget.selected.add(widget.asset);
-            print(widget.selected.get());
+            print(widget.asset);
             },
           child: Image.asset(widget.asset),
         )
