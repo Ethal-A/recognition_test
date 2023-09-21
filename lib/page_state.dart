@@ -1,0 +1,1 @@
+enum PageState { configure, load, select, result }
