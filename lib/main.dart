@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:visual_memory_test/flash.dart';
 import 'package:visual_memory_test/page_state.dart';
 import 'package:visual_memory_test/select_widget.dart';
 import 'package:visual_memory_test/selected_provider.dart';
@@ -57,7 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ]
   );
 
-  Widget startWidget() {
+  Widget configureWidget() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -65,11 +66,30 @@ class _MyHomePageState extends State<MyHomePage> {
         ElevatedButton(
           onPressed: () {
             setState(() {
-              pageState = PageState.load;
+              pageState = PageState.flash;
             });
           },
           child: const Text("Start")
         )
+      ],
+    );
+  }
+
+  Widget loadWidget() {
+    throw UnimplementedError();
+  }
+
+  Widget selectWidget() {
+    return Column(
+      children: <Widget>[
+        Consumer<SelectedProvider>(
+          builder: (context, selectedProvider, _) {
+            return Text(
+              selectedProvider.get.toString()
+            );
+          },
+        ),
+        SelectWidget(assets.sublist(0, 4), assets.sublist(5))
       ],
     );
   }
@@ -85,30 +105,16 @@ class _MyHomePageState extends State<MyHomePage> {
           child: ((() {
             switch(pageState) {
               case PageState.configure:
-                return startWidget();
-              case PageState.load:
-                return const Text("To implement");
+                return configureWidget();
+              case PageState.flash:
+                return Flash(assets, const Duration(seconds: 1));
               case PageState.select:
-                return const Text("To implement");
+                return selectWidget();
               case PageState.result:
                 return const Text("To implement");
             }
           }())),
         )
-        // body: Column(
-        //   children: <Widget>[
-        //     Consumer<SelectedProvider>(
-        //       builder: (context, selectedProvider, _) {
-        //         return Text(
-        //           selectedProvider.get.toString()
-        //         );
-        //       },
-        //     ),
-        //     SelectWidget(assets.sublist(0, 4), assets.sublist(5))
-        //   ],
-        // )
-
-        // body: Center(child: Flash(assets, const Duration(seconds: 1)))
         );
   }
 }

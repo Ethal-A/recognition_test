@@ -1,1 +1,1 @@
-enum PageState { configure, load, select, result }
+enum PageState { configure, flash, select, result }
