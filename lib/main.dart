@@ -35,28 +35,35 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  // Number of images
-  static const int NUMBER_OF_ASSETS = 9;
-  late List<String> assets;
+  // Asset path generation
+  static const String ASSETS_PATH = "../assets/"; // Path to assets
+  static const int TOTAL_NUMBER_OF_ASSETS = 9;
+  late final List<String> totalAssets;
 
-  // Displaying images
-  static const String ASSETS_PATH = "../assets/"; // Path to images
+  // Configurable
+  int numberOfAssetsToFlash = 4;  // Ensure at most half (rounded down) of total assets
+  Duration durationPerAsset = const Duration(seconds: 1);
+  late List<String> assetsToFlash;
+  late List<String> assetsToDeceive;
 
   // State of page
   PageState pageState = PageState.configure;
 
-
   _MyHomePageState() {
-    // Generate assets to show
-    assets = List<String>.generate(
-        NUMBER_OF_ASSETS, (index) => "$ASSETS_PATH$index.png");
-    assets.shuffle(Random()); // Randomising
+    // create path to assets
+    totalAssets = List<String>.generate(
+        TOTAL_NUMBER_OF_ASSETS, (index) => "$ASSETS_PATH$index.png");
+    totalAssets.shuffle(Random()); // Randomising
+
+    // Set the assets that will be flashed and those to be used as red herrings 
+    assetsToFlash = totalAssets.sublist(0, numberOfAssetsToFlash);
+    assetsToDeceive = totalAssets.sublist(numberOfAssetsToFlash);
   }
 
   Widget options = const Row(
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     children: [
-      Text("Number of images"),
+      Text("Number of assets"),
       Text("Speed of flash"),
       ]
   );
@@ -72,21 +79,6 @@ class _MyHomePageState extends State<MyHomePage> {
           },
           child: const Text("Start")
         )
-      ],
-    );
-  }
-
-  Widget selectWidget() {
-    return Column(
-      children: <Widget>[
-        Consumer<Selected>(
-          builder: (context, Selected, _) {
-            return Text(
-              Selected.get.toString()
-            );
-          },
-        ),
-        SelectWidget(assets.sublist(0, 4), assets.sublist(5))
       ],
     );
   }
@@ -106,9 +98,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   case PageState.configure:
                     return configureWidget();
                   case PageState.flash:
-                    return Flash(assets, const Duration(seconds: 1));
+                    return Flash(assetsToFlash, durationPerAsset);
                   case PageState.select:
-                    return selectWidget();
+                    return SelectWidget(assetsToFlash, assetsToDeceive);
                   case PageState.result:
                     return const Text("To implement");
                 }

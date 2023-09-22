@@ -48,11 +48,17 @@ class _SelectWidgetState extends State<SelectWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Selectable(widget.shownAssets[_curIndex]),
-        Selectable(widget.unshownAssets[_curIndex])
+      children: [
+        const Text("Select the image you have seen before"),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Selectable(widget.shownAssets[_curIndex]),
+            Selectable(widget.unshownAssets[_curIndex])
+          ],
+        ),
       ],
     );
   }

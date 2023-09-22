@@ -16,6 +16,7 @@ windows
 .history
 .svn/
 migrate_working_dir/
+tmp/
 
 # IntelliJ related
 *.iml
