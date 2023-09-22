@@ -1,6 +1,6 @@
 {
-    "name": "visual_memory_test",
-    "short_name": "visual_memory_test",
+    "name": "recognition_test",
+    "short_name": "recognition_test",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

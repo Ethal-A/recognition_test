@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:visual_memory_test/selected.dart';
+
+import 'package:recognition_test/selected.dart';
 
 class Selectable extends StatefulWidget {
   final String asset;

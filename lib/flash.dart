@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:visual_memory_test/page_state.dart';
+
+import 'package:recognition_test/page_state.dart';
 
 class Flash extends StatefulWidget {
   final List<String> assets; // Assets to flash

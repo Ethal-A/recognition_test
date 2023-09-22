@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:visual_memory_test/Selectable.dart';
 import 'package:provider/provider.dart';
-import 'package:visual_memory_test/page_state.dart';
-import 'package:visual_memory_test/selected.dart';
+
+import 'package:recognition_test/Selectable.dart';
+import 'package:recognition_test/page_state.dart';
+import 'package:recognition_test/selected.dart';
 
 class SelectWidget extends StatefulWidget {
   final List<String> shownAssets; // Assets that the user has seen flashed

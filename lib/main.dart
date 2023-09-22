@@ -1,14 +1,13 @@
 // ignore_for_file: constant_identifier_names
 
-import 'dart:collection';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:visual_memory_test/flash.dart';
-import 'package:visual_memory_test/page_state.dart';
-import 'package:visual_memory_test/select_widget.dart';
-import 'package:visual_memory_test/selected.dart';
+import 'package:recognition_test/flash.dart';
+import 'package:recognition_test/page_state.dart';
+import 'package:recognition_test/select_widget.dart';
+import 'package:recognition_test/selected.dart';
 
 void main() {
   runApp(MultiProvider(
