@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:visual_memory_test/selected_provider.dart';
+import 'package:visual_memory_test/selected.dart';
 
 class Selectable extends StatefulWidget {
   final String asset;
@@ -33,7 +33,7 @@ class _SelectableState extends State<Selectable> {
         ),
         child: GestureDetector(
           onTap: () {
-            Provider.of<SelectedProvider>(context, listen: false)
+            Provider.of<Selected>(context, listen: false)
                 .add(widget.asset);
           },
           child: Image.asset(widget.asset),

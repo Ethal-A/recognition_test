@@ -7,12 +7,15 @@ import 'package:provider/provider.dart';
 import 'package:visual_memory_test/flash.dart';
 import 'package:visual_memory_test/page_state.dart';
 import 'package:visual_memory_test/select_widget.dart';
-import 'package:visual_memory_test/selected_provider.dart';
+import 'package:visual_memory_test/selected.dart';
 
 void main() {
-  runApp(ChangeNotifierProvider(
-      create: (_) => SelectedProvider(), // Provider for global state
-      child: const MyApp()));
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (_) => Selected()),          // Used to track selected assets by the user
+      ChangeNotifierProvider(create: (_) => CurrentPageState())   // Used to track the homepage state
+    ],
+    child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -65,9 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
         options,
         ElevatedButton(
           onPressed: () {
-            setState(() {
-              pageState = PageState.flash;
-            });
+            Provider.of<CurrentPageState>(context, listen: false).set(PageState.flash);
           },
           child: const Text("Start")
         )
@@ -75,17 +76,13 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget loadWidget() {
-    throw UnimplementedError();
-  }
-
   Widget selectWidget() {
     return Column(
       children: <Widget>[
-        Consumer<SelectedProvider>(
-          builder: (context, selectedProvider, _) {
+        Consumer<Selected>(
+          builder: (context, Selected, _) {
             return Text(
-              selectedProvider.get.toString()
+              Selected.get.toString()
             );
           },
         ),
@@ -100,20 +97,24 @@ class _MyHomePageState extends State<MyHomePage> {
         appBar: AppBar(
           title: const Text('Recognition Test'),
         ),
-        body: Container(
-          alignment: Alignment.center,
-          child: ((() {
-            switch(pageState) {
-              case PageState.configure:
-                return configureWidget();
-              case PageState.flash:
-                return Flash(assets, const Duration(seconds: 1));
-              case PageState.select:
-                return selectWidget();
-              case PageState.result:
-                return const Text("To implement");
-            }
-          }())),
+        body: Consumer<CurrentPageState>(
+          builder: (BuildContext _, CurrentPageState currentPageState, Widget? __) {
+            return Container(
+              alignment: Alignment.center,
+              child: ((() {
+                switch(currentPageState.get) {
+                  case PageState.configure:
+                    return configureWidget();
+                  case PageState.flash:
+                    return Flash(assets, const Duration(seconds: 1));
+                  case PageState.select:
+                    return selectWidget();
+                  case PageState.result:
+                    return const Text("To implement");
+                }
+              }())),
+            );
+          },
         )
         );
   }
