@@ -1,5 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
+import 'dart:collection';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -82,6 +83,18 @@ class _MyHomePageState extends State<MyHomePage> {
       ],
     );
   }
+
+  Widget resultWidget() {
+    // Count the number of selected assets that were part of the to flash assets list
+    List<String> selectedAssets = Provider.of<Selected>(context, listen: false).get;
+    int count = 0;
+    Set<String> assetsFlashedSet = assetsToFlash.toSet();
+    for (var element in selectedAssets) {
+      if (assetsFlashedSet.contains(element)) count++;
+    }
+    
+    return Text("Result: $count out of ${assetsToFlash.length} or ${(count/assetsToFlash.length).toStringAsFixed(2)}");
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -102,7 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   case PageState.select:
                     return SelectWidget(assetsToFlash, assetsToDeceive);
                   case PageState.result:
-                    return const Text("To implement");
+                    return resultWidget();
                 }
               }())),
             );
