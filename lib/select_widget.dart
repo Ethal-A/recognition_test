@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:recognition_test/Selectable.dart';
+import 'package:recognition_test/selectable.dart';
 import 'package:recognition_test/page_state.dart';
 import 'package:recognition_test/selected.dart';
 

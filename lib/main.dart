@@ -146,8 +146,11 @@ class _MyHomePageState extends State<MyHomePage> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
-            "Result: $count out of ${assetsToFlash.length} or ${(count / assetsToFlash.length).toStringAsFixed(2)}"),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+              "You scored $count out of ${assetsToFlash.length} or ${(count / assetsToFlash.length).toStringAsFixed(2)}"),
+        ),
         ElevatedButton(
             onPressed: () {
               // Reset content of selected
