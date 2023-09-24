@@ -56,15 +56,22 @@ class _SelectWidgetState extends State<SelectWidget> {
           ];
     selectables.shuffle();
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Text("Select the image you have seen before"),
-        Row(
+    // Allow user to scroll on box axis' to prevent render flex overflow exception
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: selectables,
+          children: [
+            const Text("Select the image you have seen before"),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: selectables,
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }
