@@ -37,7 +37,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   // Asset path generation
   static const String ASSETS_PATH = "../assets/"; // Path to assets
-  static const int TOTAL_NUMBER_OF_ASSETS = 10;
+  static const int TOTAL_NUMBER_OF_ASSETS = 60;
   late final List<String> totalAssets;
 
   // Configurable
@@ -51,12 +51,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // State of page
   PageState pageState = PageState.configure;
-
-  // For rounding values (reference: https://www.bezkoder.com/dart-round-double/)
-  double roundDouble(double value, int dp) {
-    num mod = pow(10, dp);
-    return (value * mod).roundToDouble() / mod;
-  }
 
   _MyHomePageState() {
     // create path to all the assets
