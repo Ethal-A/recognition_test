@@ -10,12 +10,12 @@ import 'package:recognition_test/select_widget.dart';
 import 'package:recognition_test/selected.dart';
 
 void main() {
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider(create: (_) => Selected()),          // Used to track selected assets by the user
-      ChangeNotifierProvider(create: (_) => CurrentPageState())   // Used to track the homepage state
-    ],
-    child: const MyApp()));
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(
+        create: (_) => Selected()), // Used to track selected assets by the user
+    ChangeNotifierProvider(
+        create: (_) => CurrentPageState()) // Used to track the homepage state
+  ], child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -50,45 +50,44 @@ class _MyHomePageState extends State<MyHomePage> {
   PageState pageState = PageState.configure;
 
   _MyHomePageState() {
-    // create path to assets
+    // create path to assets and shuffle to randomise
     totalAssets = List<String>.generate(
         TOTAL_NUMBER_OF_ASSETS, (index) => "$ASSETS_PATH$index.png");
     totalAssets.shuffle(Random()); // Randomising
 
     // Ensure at most half (rounded down) of total assets
-    numberOfAssetsToFlash = (TOTAL_NUMBER_OF_ASSETS/2).floor();
-
-    // Set the assets that will be flashed and those to be used as red herrings (TODO: Must be set when user clicks start)
-    assetsToFlash = totalAssets.sublist(0, numberOfAssetsToFlash);
-    assetsToDeceive = totalAssets.sublist(numberOfAssetsToFlash);
+    numberOfAssetsToFlash = (TOTAL_NUMBER_OF_ASSETS / 2).floor();
   }
 
   Widget options() {
-    int assetsToFlashDivisions = (TOTAL_NUMBER_OF_ASSETS/2).floor();
-    
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Column(
-          children: [
-            const Text("Number of images to flash"),
-            Slider(
-              value: numberOfAssetsToFlash.toDouble(),
-              onChanged: (double value) {
-                setState(() {
-                  numberOfAssetsToFlash = value.toInt();
-                });
-              },
-              divisions: assetsToFlashDivisions - 1,  // Number of divisions is inclusive of the start and end
-              label: numberOfAssetsToFlash.toString(),
-              max: assetsToFlashDivisions.toDouble(),
-              min: 1,
-            ),
-          ],
-        ),
-        Text("Speed of flash"),
-        ]
-      );
+    int assetsToFlashDivisions = (TOTAL_NUMBER_OF_ASSETS / 2).floor();
+
+    return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+      Column(
+        children: [
+          Text("Number of images to flash: $numberOfAssetsToFlash"),
+          Row(
+            children: [
+              const Text("1"),
+              Slider(
+                value: numberOfAssetsToFlash.toDouble(),
+                onChanged: (double value) {
+                  setState(() {
+                    numberOfAssetsToFlash = value.toInt();
+                  });
+                },
+                divisions: assetsToFlashDivisions -
+                    1, // Number of divisions is inclusive of the start and end
+                max: assetsToFlashDivisions.toDouble(),
+                min: 1,
+              ),
+              Text(assetsToFlashDivisions.toString()),
+            ],
+          ),
+        ],
+      ),
+      Text("Speed of flash"),
+    ]);
   }
 
   Widget configureWidget() {
@@ -97,27 +96,32 @@ class _MyHomePageState extends State<MyHomePage> {
       children: [
         options(),
         ElevatedButton(
-          onPressed: () {
-            Provider.of<CurrentPageState>(context, listen: false).set(PageState.flash);
-          },
-          child: const Text("Start")
-        )
+            onPressed: () {
+              // Set the assets that will be flashed and those to be used as red herrings (TODO: Must be set when user clicks start)
+              assetsToFlash = totalAssets.sublist(0, numberOfAssetsToFlash);
+              assetsToDeceive = totalAssets.sublist(numberOfAssetsToFlash);
+              Provider.of<CurrentPageState>(context, listen: false)
+                  .set(PageState.flash);
+            },
+            child: const Text("Start"))
       ],
     );
   }
 
   Widget resultWidget() {
     // Count the number of selected assets that were part of the to flash assets list
-    List<String> selectedAssets = Provider.of<Selected>(context, listen: false).get;
+    List<String> selectedAssets =
+        Provider.of<Selected>(context, listen: false).get;
     int count = 0;
     Set<String> assetsFlashedSet = assetsToFlash.toSet();
     for (var element in selectedAssets) {
       if (assetsFlashedSet.contains(element)) count++;
     }
-    
-    return Text("Result: $count out of ${assetsToFlash.length} or ${(count/assetsToFlash.length).toStringAsFixed(2)}");
+
+    return Text(
+        "Result: $count out of ${assetsToFlash.length} or ${(count / assetsToFlash.length).toStringAsFixed(2)}");
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -125,11 +129,12 @@ class _MyHomePageState extends State<MyHomePage> {
           title: const Text('Recognition Test'),
         ),
         body: Consumer<CurrentPageState>(
-          builder: (BuildContext _, CurrentPageState currentPageState, Widget? __) {
+          builder:
+              (BuildContext _, CurrentPageState currentPageState, Widget? __) {
             return Container(
               alignment: Alignment.center,
               child: ((() {
-                switch(currentPageState.get) {
+                switch (currentPageState.get) {
                   case PageState.configure:
                     return configureWidget();
                   case PageState.flash:
@@ -142,7 +147,6 @@ class _MyHomePageState extends State<MyHomePage> {
               }())),
             );
           },
-        )
-        );
+        ));
   }
 }
