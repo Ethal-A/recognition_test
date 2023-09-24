@@ -8,6 +8,8 @@ The following web application created in Flutter is inspired by Joshua Foer's Mo
 Please note that this is not a formal test nor is it intended to be. This is simply a small project for fun hence even the styling of the web application was kept to a bare minimum.
 
 ## Running the Web Application
+To run the web application using Flutter in chrome simply use the command `flutter run -d chrome` in a terminal inside this project directory.
+
 For the convenience of those who do not want to install Flutter, a copy of the web application build is provided in [web_app_build](web_app_build). To run the web application, simply start a http server in that folder. The following instructions assume you have access to a terminal (such as Git Bash) and have python installed:
 1. Go to the folder in a terminal `cd path/to/web_app_build`.
 2. Run the command `python -m http.server 8000` inside `web_app_build`.
