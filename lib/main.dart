@@ -156,6 +156,11 @@ class _MyHomePageState extends State<MyHomePage> {
             "Result: $count out of ${assetsToFlash.length} or ${(count / assetsToFlash.length).toStringAsFixed(2)}"),
         ElevatedButton(
             onPressed: () {
+              // Reset content of selected
+              Provider.of<Selected>(context, listen: false)
+                .reset();
+
+              // Set page back to configure
               Provider.of<CurrentPageState>(context, listen: false)
                   .set(PageState.configure);
             },
