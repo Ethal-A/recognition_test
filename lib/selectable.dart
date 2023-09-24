@@ -4,8 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:recognition_test/selected.dart';
 
 class Selectable extends StatefulWidget {
-  final String asset;
-  const Selectable(this.asset, {super.key});
+  final String image;
+  const Selectable(this.image, {super.key});
 
   @override
   State<StatefulWidget> createState() => _SelectableState();
@@ -20,9 +20,9 @@ class _SelectableState extends State<Selectable> {
         cursor: SystemMouseCursors.click,
         child: GestureDetector(
           onTap: () {
-            Provider.of<Selected>(context, listen: false).add(widget.asset);
+            Provider.of<Selected>(context, listen: false).add(widget.image);
           },
-          child: Image.asset(widget.asset),
+          child: Image.asset(widget.image),
         ),
       ),
     );

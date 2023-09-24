@@ -12,7 +12,7 @@ import 'package:recognition_test/selected.dart';
 void main() {
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(
-        create: (_) => Selected()), // Used to track selected assets by the user
+        create: (_) => Selected()), // Used to track selected images by the user
     ChangeNotifierProvider(
         create: (_) => CurrentPageState()) // Used to track the homepage state
   ], child: const MyApp()));
@@ -35,65 +35,65 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  // Asset path generation
-  static const String _ASSETS_PATH = "../assets/"; // Path to assets
-  static const int _TOTAL_NUMBER_OF_ASSETS = 60;
-  late final List<String> _totalAssets;
+  // Image path generation
+  static const String _IMAGES_PATH = "../assets/images/"; // Path to images
+  static const int _TOTAL_NUMBER_OF_IMAGES = 60;
+  late final List<String> _totalImages;
 
   // Configurable
   static const int _MAX_MS_FLASH_TIME = 5000;
   static const int _MIN_MS_FLASH_TIME = 50;
-  late int _numberOfAssetsToFlash;
-  int _msPerAsset = 1000;
-  late Duration _durationPerAsset;
-  late List<String> _assetsToFlash;
-  late List<String> _assetsToDeceive;
+  late int _numberOfImagesToFlash;
+  int _msPerImage = 1000;
+  late Duration _durationPerImage;
+  late List<String> _imagesToFlash;
+  late List<String> _imagesToDeceive;
 
   _MyHomePageState() {
-    // create path to all the assets
-    _totalAssets = List<String>.generate(
-        _TOTAL_NUMBER_OF_ASSETS, (index) => "$_ASSETS_PATH$index.png");
+    // create path to all the images
+    _totalImages = List<String>.generate(
+        _TOTAL_NUMBER_OF_IMAGES, (index) => "$_IMAGES_PATH$index.png");
 
-    // Ensure at most half (rounded down) of total assets
-    _numberOfAssetsToFlash = (_TOTAL_NUMBER_OF_ASSETS / 2).floor();
+    // Ensure at most half (rounded down) of total images
+    _numberOfImagesToFlash = (_TOTAL_NUMBER_OF_IMAGES / 2).floor();
   }
 
   Widget options() {
-    int assetsToFlashDivisions = (_TOTAL_NUMBER_OF_ASSETS / 2).floor();
+    int imagesToFlashDivisions = (_TOTAL_NUMBER_OF_IMAGES / 2).floor();
 
     return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
       Column(
         children: [
-          Text("Number of images to flash: $_numberOfAssetsToFlash"),
+          Text("Number of images to flash: $_numberOfImagesToFlash"),
           Row(
             children: [
               const Text("1"),
               Slider(
-                value: _numberOfAssetsToFlash.toDouble(),
+                value: _numberOfImagesToFlash.toDouble(),
                 onChanged: (double value) {
                   setState(() {
-                    _numberOfAssetsToFlash = value.toInt();
+                    _numberOfImagesToFlash = value.toInt();
                   });
                 },
-                max: assetsToFlashDivisions.toDouble(),
+                max: imagesToFlashDivisions.toDouble(),
                 min: 1,
               ),
-              Text(assetsToFlashDivisions.toString()),
+              Text(imagesToFlashDivisions.toString()),
             ],
           ),
         ],
       ),
       Column(
         children: [
-          Text("Time per image: ${_msPerAsset}ms"),
+          Text("Time per image: ${_msPerImage}ms"),
           Row(
             children: [
               const Text("${_MIN_MS_FLASH_TIME}ms"),
               Slider(
-                value: _msPerAsset.toDouble(),
+                value: _msPerImage.toDouble(),
                 onChanged: (double value) {
                   setState(() {
-                    _msPerAsset = value.round();
+                    _msPerImage = value.round();
                   });
                 },
                 max: _MAX_MS_FLASH_TIME.toDouble(),
@@ -114,11 +114,11 @@ class _MyHomePageState extends State<MyHomePage> {
         options(),
         ElevatedButton(
             onPressed: () {
-              // Set the assets that will be flashed and those to be used as red herrings
-              _totalAssets.shuffle(Random()); // Randomise the assets
-              _assetsToFlash = _totalAssets.sublist(0, _numberOfAssetsToFlash);
-              _assetsToDeceive = _totalAssets.sublist(_numberOfAssetsToFlash);
-              _durationPerAsset = Duration(milliseconds: _msPerAsset);
+              // Set the images that will be flashed and those to be used as red herrings
+              _totalImages.shuffle(Random()); // Randomise the images
+              _imagesToFlash = _totalImages.sublist(0, _numberOfImagesToFlash);
+              _imagesToDeceive = _totalImages.sublist(_numberOfImagesToFlash);
+              _durationPerImage = Duration(milliseconds: _msPerImage);
               
               Provider.of<CurrentPageState>(context, listen: false)
                   .set(PageState.flash);
@@ -129,13 +129,13 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget resultWidget() {
-    // Count the number of selected assets that were part of the to flash assets list
-    List<String> selectedAssets =
+    // Count the number of selected images that were part of the to flash images list
+    List<String> selectedImages =
         Provider.of<Selected>(context, listen: false).get;
     int count = 0;
-    Set<String> assetsFlashedSet = _assetsToFlash.toSet();
-    for (var element in selectedAssets) {
-      if (assetsFlashedSet.contains(element)) count++;
+    Set<String> imagesFlashedSet = _imagesToFlash.toSet();
+    for (var element in selectedImages) {
+      if (imagesFlashedSet.contains(element)) count++;
     }
 
     return Column(
@@ -144,7 +144,7 @@ class _MyHomePageState extends State<MyHomePage> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
-              "You scored $count out of ${_assetsToFlash.length} or ${(count / _assetsToFlash.length).toStringAsFixed(2)}"),
+              "You scored $count out of ${_imagesToFlash.length} or ${((count / _imagesToFlash.length)*100).toStringAsFixed(2)}%"),
         ),
         ElevatedButton(
             onPressed: () {
@@ -178,9 +178,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     case PageState.configure:
                       return configureWidget();
                     case PageState.flash:
-                      return Flash(_assetsToFlash, _durationPerAsset);
+                      return Flash(_imagesToFlash, _durationPerImage);
                     case PageState.select:
-                      return SelectWidget(_assetsToFlash, _assetsToDeceive);
+                      return SelectWidget(_imagesToFlash, _imagesToDeceive);
                     case PageState.result:
                       return resultWidget();
                   }

@@ -6,9 +6,9 @@ import 'package:recognition_test/page_state.dart';
 import 'package:recognition_test/selected.dart';
 
 class SelectWidget extends StatefulWidget {
-  final List<String> _shownAssets; // Assets that the user has seen flashed
-  final List<String> _unshownAssets; // Assets that the user has not seen flashed
-  const SelectWidget(this._shownAssets, this._unshownAssets, {super.key});
+  final List<String> _shownImages; // Images that the user has seen flashed
+  final List<String> _unshownImages; // Images that the user has not seen flashed
+  const SelectWidget(this._shownImages, this._unshownImages, {super.key});
 
   @override
   State<SelectWidget> createState() => _SelectWidgetState();
@@ -20,9 +20,9 @@ class _SelectWidgetState extends State<SelectWidget> {
   // Updates the index up until it would cause an index out of bounds in which it updates the page state
   void _selectedListener() {
     Selected selected = context.read<Selected>();
-    int numberOfSelectedAssets = selected.get.length;
-    if (numberOfSelectedAssets >= widget._shownAssets.length ||
-        numberOfSelectedAssets >= widget._unshownAssets.length) {
+    int numberOfSelectedImages = selected.get.length;
+    if (numberOfSelectedImages >= widget._shownImages.length ||
+        numberOfSelectedImages >= widget._unshownImages.length) {
       
       // Remove this very listener
       Provider.of<Selected>(context, listen: false)
@@ -33,7 +33,7 @@ class _SelectWidgetState extends State<SelectWidget> {
           .set(PageState.result);
     } else {
       setState(() {
-        _curIndex = numberOfSelectedAssets;
+        _curIndex = numberOfSelectedImages;
       });
     }
   }
@@ -49,10 +49,10 @@ class _SelectWidgetState extends State<SelectWidget> {
 
   @override
   Widget build(BuildContext context) {
-    // Randomly shuffle asset positions
+    // Randomly shuffle images positions
     List<Widget> selectables = <Widget>[
-            Selectable(widget._shownAssets[_curIndex]),
-            Selectable(widget._unshownAssets[_curIndex])
+            Selectable(widget._shownImages[_curIndex]),
+            Selectable(widget._unshownImages[_curIndex])
           ];
     selectables.shuffle();
 

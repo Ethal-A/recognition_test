@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-// Used to track the selected assets by the user
+// Used to track the selected images by the user
 class Selected extends ChangeNotifier {
   List<String> _selected = [];
   

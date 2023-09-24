@@ -4,9 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:recognition_test/page_state.dart';
 
 class Flash extends StatefulWidget {
-  final List<String> assets; // Assets to flash
-  final Duration durationPerAsset; // Duration between asset flash
-  const Flash(this.assets, this.durationPerAsset, {super.key});
+  final List<String> images; // Images to flash
+  final Duration durationPerImage; // Duration between images
+  const Flash(this.images, this.durationPerImage, {super.key});
 
   @override
   State<StatefulWidget> createState() => _FlashState();
@@ -15,20 +15,20 @@ class Flash extends StatefulWidget {
 class _FlashState extends State<Flash> {
   int _index = 0;
 
-  void recurseAssets() {
-    // Once out of assets, change the state of the page
-    if (_index >= widget.assets.length - 1) {
+  void recurseImages() {
+    // Once out of images, change the state of the page
+    if (_index >= widget.images.length - 1) {
       // Provide a delay before switching to the next page (otherwise the last image will disappear immediately).
-      Future.delayed(widget.durationPerAsset, () {
+      Future.delayed(widget.durationPerImage, () {
         Provider.of<CurrentPageState>(context, listen: false)
             .set(PageState.select);
       });
     } else {
-      // Recursively increment the index of the current asset
-      Future.delayed(widget.durationPerAsset, () {
+      // Recursively increment the index of the current images
+      Future.delayed(widget.durationPerImage, () {
         setState(() {
           _index++;
-          recurseAssets();
+          recurseImages();
         });
       });
     }
@@ -38,11 +38,11 @@ class _FlashState extends State<Flash> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) =>
-        recurseAssets()); // Begin flashing assets once the widget is initialised
+        recurseImages()); // Begin flashing images once the widget is initialised
   }
 
   @override
   Widget build(BuildContext context) {
-    return Center(child: Image.asset(widget.assets[_index]));
+    return Center(child: Image.asset(widget.images[_index]));
   }
 }
