@@ -49,16 +49,20 @@ class _SelectWidgetState extends State<SelectWidget> {
 
   @override
   Widget build(BuildContext context) {
+    // Randomly shuffle asset positions
+    List<Widget> selectables = <Widget>[
+            Selectable(widget.shownAssets[_curIndex]),
+            Selectable(widget.unshownAssets[_curIndex])
+          ];
+    selectables.shuffle();
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const Text("Select the image you have seen before"),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Selectable(widget.shownAssets[_curIndex]),
-            Selectable(widget.unshownAssets[_curIndex])
-          ],
+          children: selectables,
         ),
       ],
     );

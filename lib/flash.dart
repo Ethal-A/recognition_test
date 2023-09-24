@@ -18,8 +18,11 @@ class _FlashState extends State<Flash> {
   void recurseAssets() {
     // Once out of assets, change the state of the page
     if (_index >= widget.assets.length - 1) {
-      Provider.of<CurrentPageState>(context, listen: false)
-          .set(PageState.select);
+      // Provide a delay before switching to the next page (otherwise the last image will disappear immediately).
+      Future.delayed(widget.durationPerAsset, () {
+        Provider.of<CurrentPageState>(context, listen: false)
+            .set(PageState.select);
+      });
     } else {
       // Recursively increment the index of the current asset
       Future.delayed(widget.durationPerAsset, () {
