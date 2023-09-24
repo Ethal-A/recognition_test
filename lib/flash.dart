@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:recognition_test/page_state.dart';
+import 'package:recognition_test/utils.dart';
 
 class Flash extends StatefulWidget {
   final List<String> images; // Images to flash
@@ -43,6 +44,6 @@ class _FlashState extends State<Flash> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(child: Image.asset(widget.images[_index]));
+    return Center(child: Image.asset(platformNeutralAssetPath(widget.images[_index])));
   }
 }

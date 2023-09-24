@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:recognition_test/selected.dart';
+import 'package:recognition_test/utils.dart';
 
 class Selectable extends StatefulWidget {
   final String image;
@@ -22,7 +23,7 @@ class _SelectableState extends State<Selectable> {
           onTap: () {
             Provider.of<Selected>(context, listen: false).add(widget.image);
           },
-          child: Image.asset(widget.image),
+          child: Image.asset(platformNeutralAssetPath(widget.image)),
         ),
       ),
     );
