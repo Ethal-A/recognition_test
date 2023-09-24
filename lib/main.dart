@@ -41,13 +41,22 @@ class _MyHomePageState extends State<MyHomePage> {
   late final List<String> totalAssets;
 
   // Configurable
+  static const int MAX_MS_FLASH_TIME = 5000;
+  static const int MIN_MS_FLASH_TIME = 50;
   late int numberOfAssetsToFlash;
-  Duration durationPerAsset = const Duration(seconds: 1);
+  int msPerAsset = 1000;
+  late Duration durationPerAsset;
   late List<String> assetsToFlash;
   late List<String> assetsToDeceive;
 
   // State of page
   PageState pageState = PageState.configure;
+
+  // For rounding values (reference: https://www.bezkoder.com/dart-round-double/)
+  double roundDouble(double value, int dp) {
+    num mod = pow(10, dp);
+    return (value * mod).roundToDouble() / mod;
+  }
 
   _MyHomePageState() {
     // create path to assets and shuffle to randomise
@@ -86,7 +95,27 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-      Text("Speed of flash"),
+      Column(
+        children: [
+          Text("Time per image: ${msPerAsset}ms"),
+          Row(
+            children: [
+              const Text("${MIN_MS_FLASH_TIME}ms"),
+              Slider(
+                value: msPerAsset.toDouble(),
+                onChanged: (double value) {
+                  setState(() {
+                    msPerAsset = value.round();
+                  });
+                },
+                max: MAX_MS_FLASH_TIME.toDouble(),
+                min: MIN_MS_FLASH_TIME.toDouble(),
+              ),
+              const Text("${MAX_MS_FLASH_TIME}ms"),
+            ],
+          ),
+        ],
+      ),
     ]);
   }
 
@@ -100,6 +129,7 @@ class _MyHomePageState extends State<MyHomePage> {
               // Set the assets that will be flashed and those to be used as red herrings (TODO: Must be set when user clicks start)
               assetsToFlash = totalAssets.sublist(0, numberOfAssetsToFlash);
               assetsToDeceive = totalAssets.sublist(numberOfAssetsToFlash);
+              durationPerAsset = Duration(milliseconds: msPerAsset);
               Provider.of<CurrentPageState>(context, listen: false)
                   .set(PageState.flash);
             },
