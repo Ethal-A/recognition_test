@@ -41,7 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
   late final List<String> totalAssets;
 
   // Configurable
-  int numberOfAssetsToFlash = 4;  // Ensure at most half (rounded down) of total assets
+  late int numberOfAssetsToFlash;
   Duration durationPerAsset = const Duration(seconds: 1);
   late List<String> assetsToFlash;
   late List<String> assetsToDeceive;
@@ -55,24 +55,47 @@ class _MyHomePageState extends State<MyHomePage> {
         TOTAL_NUMBER_OF_ASSETS, (index) => "$ASSETS_PATH$index.png");
     totalAssets.shuffle(Random()); // Randomising
 
-    // Set the assets that will be flashed and those to be used as red herrings 
+    // Ensure at most half (rounded down) of total assets
+    numberOfAssetsToFlash = (TOTAL_NUMBER_OF_ASSETS/2).floor();
+
+    // Set the assets that will be flashed and those to be used as red herrings (TODO: Must be set when user clicks start)
     assetsToFlash = totalAssets.sublist(0, numberOfAssetsToFlash);
     assetsToDeceive = totalAssets.sublist(numberOfAssetsToFlash);
   }
 
-  Widget options = const Row(
-    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    children: [
-      Text("Number of assets"),
-      Text("Speed of flash"),
-      ]
-  );
+  Widget options() {
+    int assetsToFlashDivisions = (TOTAL_NUMBER_OF_ASSETS/2).floor();
+    
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Column(
+          children: [
+            const Text("Number of images to flash"),
+            Slider(
+              value: numberOfAssetsToFlash.toDouble(),
+              onChanged: (double value) {
+                setState(() {
+                  numberOfAssetsToFlash = value.toInt();
+                });
+              },
+              divisions: assetsToFlashDivisions - 1,  // Number of divisions is inclusive of the start and end
+              label: numberOfAssetsToFlash.toString(),
+              max: assetsToFlashDivisions.toDouble(),
+              min: 1,
+            ),
+          ],
+        ),
+        Text("Speed of flash"),
+        ]
+      );
+  }
 
   Widget configureWidget() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        options,
+        options(),
         ElevatedButton(
           onPressed: () {
             Provider.of<CurrentPageState>(context, listen: false).set(PageState.flash);
