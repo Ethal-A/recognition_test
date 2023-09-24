@@ -36,50 +36,45 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   // Asset path generation
-  static const String ASSETS_PATH = "../assets/"; // Path to assets
-  static const int TOTAL_NUMBER_OF_ASSETS = 60;
-  late final List<String> totalAssets;
+  static const String _ASSETS_PATH = "../assets/"; // Path to assets
+  static const int _TOTAL_NUMBER_OF_ASSETS = 60;
+  late final List<String> _totalAssets;
 
   // Configurable
-  static const int MAX_MS_FLASH_TIME = 5000;
-  static const int MIN_MS_FLASH_TIME = 50;
-  late int numberOfAssetsToFlash;
-  int msPerAsset = 1000;
-  late Duration durationPerAsset;
-  late List<String> assetsToFlash;
-  late List<String> assetsToDeceive;
-
-  // State of page
-  PageState pageState = PageState.configure;
+  static const int _MAX_MS_FLASH_TIME = 5000;
+  static const int _MIN_MS_FLASH_TIME = 50;
+  late int _numberOfAssetsToFlash;
+  int _msPerAsset = 1000;
+  late Duration _durationPerAsset;
+  late List<String> _assetsToFlash;
+  late List<String> _assetsToDeceive;
 
   _MyHomePageState() {
     // create path to all the assets
-    totalAssets = List<String>.generate(
-        TOTAL_NUMBER_OF_ASSETS, (index) => "$ASSETS_PATH$index.png");
+    _totalAssets = List<String>.generate(
+        _TOTAL_NUMBER_OF_ASSETS, (index) => "$_ASSETS_PATH$index.png");
 
     // Ensure at most half (rounded down) of total assets
-    numberOfAssetsToFlash = (TOTAL_NUMBER_OF_ASSETS / 2).floor();
+    _numberOfAssetsToFlash = (_TOTAL_NUMBER_OF_ASSETS / 2).floor();
   }
 
   Widget options() {
-    int assetsToFlashDivisions = (TOTAL_NUMBER_OF_ASSETS / 2).floor();
+    int assetsToFlashDivisions = (_TOTAL_NUMBER_OF_ASSETS / 2).floor();
 
     return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
       Column(
         children: [
-          Text("Number of images to flash: $numberOfAssetsToFlash"),
+          Text("Number of images to flash: $_numberOfAssetsToFlash"),
           Row(
             children: [
               const Text("1"),
               Slider(
-                value: numberOfAssetsToFlash.toDouble(),
+                value: _numberOfAssetsToFlash.toDouble(),
                 onChanged: (double value) {
                   setState(() {
-                    numberOfAssetsToFlash = value.toInt();
+                    _numberOfAssetsToFlash = value.toInt();
                   });
                 },
-                divisions: assetsToFlashDivisions -
-                    1, // Number of divisions is inclusive of the start and end
                 max: assetsToFlashDivisions.toDouble(),
                 min: 1,
               ),
@@ -90,21 +85,21 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       Column(
         children: [
-          Text("Time per image: ${msPerAsset}ms"),
+          Text("Time per image: ${_msPerAsset}ms"),
           Row(
             children: [
-              const Text("${MIN_MS_FLASH_TIME}ms"),
+              const Text("${_MIN_MS_FLASH_TIME}ms"),
               Slider(
-                value: msPerAsset.toDouble(),
+                value: _msPerAsset.toDouble(),
                 onChanged: (double value) {
                   setState(() {
-                    msPerAsset = value.round();
+                    _msPerAsset = value.round();
                   });
                 },
-                max: MAX_MS_FLASH_TIME.toDouble(),
-                min: MIN_MS_FLASH_TIME.toDouble(),
+                max: _MAX_MS_FLASH_TIME.toDouble(),
+                min: _MIN_MS_FLASH_TIME.toDouble(),
               ),
-              const Text("${MAX_MS_FLASH_TIME}ms"),
+              const Text("${_MAX_MS_FLASH_TIME}ms"),
             ],
           ),
         ],
@@ -120,10 +115,10 @@ class _MyHomePageState extends State<MyHomePage> {
         ElevatedButton(
             onPressed: () {
               // Set the assets that will be flashed and those to be used as red herrings
-              totalAssets.shuffle(Random()); // Randomise the assets
-              assetsToFlash = totalAssets.sublist(0, numberOfAssetsToFlash);
-              assetsToDeceive = totalAssets.sublist(numberOfAssetsToFlash);
-              durationPerAsset = Duration(milliseconds: msPerAsset);
+              _totalAssets.shuffle(Random()); // Randomise the assets
+              _assetsToFlash = _totalAssets.sublist(0, _numberOfAssetsToFlash);
+              _assetsToDeceive = _totalAssets.sublist(_numberOfAssetsToFlash);
+              _durationPerAsset = Duration(milliseconds: _msPerAsset);
               
               Provider.of<CurrentPageState>(context, listen: false)
                   .set(PageState.flash);
@@ -138,7 +133,7 @@ class _MyHomePageState extends State<MyHomePage> {
     List<String> selectedAssets =
         Provider.of<Selected>(context, listen: false).get;
     int count = 0;
-    Set<String> assetsFlashedSet = assetsToFlash.toSet();
+    Set<String> assetsFlashedSet = _assetsToFlash.toSet();
     for (var element in selectedAssets) {
       if (assetsFlashedSet.contains(element)) count++;
     }
@@ -149,7 +144,7 @@ class _MyHomePageState extends State<MyHomePage> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
-              "You scored $count out of ${assetsToFlash.length} or ${(count / assetsToFlash.length).toStringAsFixed(2)}"),
+              "You scored $count out of ${_assetsToFlash.length} or ${(count / _assetsToFlash.length).toStringAsFixed(2)}"),
         ),
         ElevatedButton(
             onPressed: () {
@@ -183,9 +178,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     case PageState.configure:
                       return configureWidget();
                     case PageState.flash:
-                      return Flash(assetsToFlash, durationPerAsset);
+                      return Flash(_assetsToFlash, _durationPerAsset);
                     case PageState.select:
-                      return SelectWidget(assetsToFlash, assetsToDeceive);
+                      return SelectWidget(_assetsToFlash, _assetsToDeceive);
                     case PageState.result:
                       return resultWidget();
                   }
