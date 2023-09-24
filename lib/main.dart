@@ -37,7 +37,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   // Asset path generation
   static const String ASSETS_PATH = "../assets/"; // Path to assets
-  static const int TOTAL_NUMBER_OF_ASSETS = 9;
+  static const int TOTAL_NUMBER_OF_ASSETS = 10;
   late final List<String> totalAssets;
 
   // Configurable
@@ -59,10 +59,9 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   _MyHomePageState() {
-    // create path to assets and shuffle to randomise
+    // create path to all the assets
     totalAssets = List<String>.generate(
         TOTAL_NUMBER_OF_ASSETS, (index) => "$ASSETS_PATH$index.png");
-    totalAssets.shuffle(Random()); // Randomising
 
     // Ensure at most half (rounded down) of total assets
     numberOfAssetsToFlash = (TOTAL_NUMBER_OF_ASSETS / 2).floor();
@@ -126,10 +125,12 @@ class _MyHomePageState extends State<MyHomePage> {
         options(),
         ElevatedButton(
             onPressed: () {
-              // Set the assets that will be flashed and those to be used as red herrings (TODO: Must be set when user clicks start)
+              // Set the assets that will be flashed and those to be used as red herrings
+              totalAssets.shuffle(Random()); // Randomise the assets
               assetsToFlash = totalAssets.sublist(0, numberOfAssetsToFlash);
               assetsToDeceive = totalAssets.sublist(numberOfAssetsToFlash);
               durationPerAsset = Duration(milliseconds: msPerAsset);
+              
               Provider.of<CurrentPageState>(context, listen: false)
                   .set(PageState.flash);
             },
@@ -151,11 +152,8 @@ class _MyHomePageState extends State<MyHomePage> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-              "Result: $count out of ${assetsToFlash.length} or ${(count / assetsToFlash.length).toStringAsFixed(2)}"),
-        ),
+        Text(
+            "Result: $count out of ${assetsToFlash.length} or ${(count / assetsToFlash.length).toStringAsFixed(2)}"),
         ElevatedButton(
             onPressed: () {
               Provider.of<CurrentPageState>(context, listen: false)
