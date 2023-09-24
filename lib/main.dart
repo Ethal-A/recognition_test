@@ -148,8 +148,22 @@ class _MyHomePageState extends State<MyHomePage> {
       if (assetsFlashedSet.contains(element)) count++;
     }
 
-    return Text(
-        "Result: $count out of ${assetsToFlash.length} or ${(count / assetsToFlash.length).toStringAsFixed(2)}");
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+              "Result: $count out of ${assetsToFlash.length} or ${(count / assetsToFlash.length).toStringAsFixed(2)}"),
+        ),
+        ElevatedButton(
+            onPressed: () {
+              Provider.of<CurrentPageState>(context, listen: false)
+                  .set(PageState.configure);
+            },
+            child: const Text("Retry")),
+      ],
+    );
   }
 
   @override
