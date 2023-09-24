@@ -6,9 +6,9 @@ import 'package:recognition_test/page_state.dart';
 import 'package:recognition_test/selected.dart';
 
 class SelectWidget extends StatefulWidget {
-  final List<String> shownAssets; // Assets that the user has seen flashed
-  final List<String> unshownAssets; // Assets that the user has not seen flashed
-  const SelectWidget(this.shownAssets, this.unshownAssets, {super.key});
+  final List<String> _shownAssets; // Assets that the user has seen flashed
+  final List<String> _unshownAssets; // Assets that the user has not seen flashed
+  const SelectWidget(this._shownAssets, this._unshownAssets, {super.key});
 
   @override
   State<SelectWidget> createState() => _SelectWidgetState();
@@ -21,8 +21,8 @@ class _SelectWidgetState extends State<SelectWidget> {
   void _selectedListener() {
     Selected selected = context.read<Selected>();
     int numberOfSelectedAssets = selected.get.length;
-    if (numberOfSelectedAssets >= widget.shownAssets.length ||
-        numberOfSelectedAssets >= widget.unshownAssets.length) {
+    if (numberOfSelectedAssets >= widget._shownAssets.length ||
+        numberOfSelectedAssets >= widget._unshownAssets.length) {
       
       // Remove this very listener
       Provider.of<Selected>(context, listen: false)
@@ -51,8 +51,8 @@ class _SelectWidgetState extends State<SelectWidget> {
   Widget build(BuildContext context) {
     // Randomly shuffle asset positions
     List<Widget> selectables = <Widget>[
-            Selectable(widget.shownAssets[_curIndex]),
-            Selectable(widget.unshownAssets[_curIndex])
+            Selectable(widget._shownAssets[_curIndex]),
+            Selectable(widget._unshownAssets[_curIndex])
           ];
     selectables.shuffle();
 
