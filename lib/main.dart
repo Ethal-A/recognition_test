@@ -165,29 +165,31 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('Recognition Test'),
-        ),
-        body: Consumer<CurrentPageState>(
-          builder:
-              (BuildContext _, CurrentPageState currentPageState, Widget? __) {
-            return Container(
-              alignment: Alignment.center,
-              child: ((() {
-                switch (currentPageState.get) {
-                  case PageState.configure:
-                    return configureWidget();
-                  case PageState.flash:
-                    return Flash(assetsToFlash, durationPerAsset);
-                  case PageState.select:
-                    return SelectWidget(assetsToFlash, assetsToDeceive);
-                  case PageState.result:
-                    return resultWidget();
-                }
-              }())),
-            );
-          },
-        ));
+    return SelectionArea(
+      child: Scaffold(
+          appBar: AppBar(
+            title: const Text('Recognition Test'),
+          ),
+          body: Consumer<CurrentPageState>(
+            builder:
+                (BuildContext _, CurrentPageState currentPageState, Widget? __) {
+              return Container(
+                alignment: Alignment.center,
+                child: ((() {
+                  switch (currentPageState.get) {
+                    case PageState.configure:
+                      return configureWidget();
+                    case PageState.flash:
+                      return Flash(assetsToFlash, durationPerAsset);
+                    case PageState.select:
+                      return SelectWidget(assetsToFlash, assetsToDeceive);
+                    case PageState.result:
+                      return resultWidget();
+                  }
+                }())),
+              );
+            },
+          )),
+    );
   }
 }
