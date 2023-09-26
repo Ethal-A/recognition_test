@@ -23,10 +23,10 @@ The below images show what the web application looks like.
 ![Configuration Page](/screenshots/Configuration%20Page.png)
 ### Flash Page
 ![Flash Page](/screenshots/Flash%20Page.png)
-### Score Page
-![Score Page](/screenshots/Score%20Page.png)
 ### Selection Page
 ![Selection Page](/screenshots/Selection%20Page.png)
+### Score Page
+![Score Page](/screenshots/Score%20Page.png)
 
 ## Running Beyond the Web
 The application can be built and run as a desktop and mobile application, however, the application was specifically designed and tested only for the web.
